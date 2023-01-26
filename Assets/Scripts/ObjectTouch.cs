@@ -30,9 +30,7 @@ public class ObjectTouch : MonoBehaviour
     {
         TaskSystem taskSystem = TaskSystem.Instance;
 
-        CabinetSystem.Instance.CabinetClass[taskSystem.lineCount].ObjectGridBool[0, taskSystem.columnCount] = false;
-
-        taskSystem.NewSearchMaterial();
+        CabinetSystem.Instance.CabinetClass[taskSystem.lineCount].ObjectGridBool[taskSystem.columnCount] = false;
     }
 
     private void BackTotheMove(GameObject player, GameObject obj)

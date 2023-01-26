@@ -6,7 +6,6 @@ using DG.Tweening;
 
 public class ViewTaskSystem : MonoSingleton<ViewTaskSystem>
 {
-    [SerializeField] Image viewPanel;
     [SerializeField] Sprite wrongMark;
     [SerializeField] List<Image> WrongImage = new List<Image>();
     [SerializeField] private Image tempImage;
