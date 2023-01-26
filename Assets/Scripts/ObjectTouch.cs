@@ -11,21 +11,13 @@ public class ObjectTouch : MonoBehaviour
         {
             ObjectID objectID = GetComponent<ObjectID>();
             TaskSystem taskSystem = TaskSystem.Instance;
-            bool isTrue = false;
 
-            for (int i = 0; i < TaskSystem.Instance.ObjectMaterialList.Count; i++)
+            if (objectID.objectID == taskSystem.searchTypeCount && objectID.materialCount == taskSystem.searchMaterialCount && GetComponent<BoxCollider>().enabled)
             {
-                if (objectID.objectID == taskSystem.ObjectTypeList[i] && objectID.materialCount == taskSystem.ObjectMaterialList[i] && GetComponent<BoxCollider>().enabled)
-                {
-                    GetComponent<BoxCollider>().enabled = false;
-                    AddedObject.Instance.StartSlalom(i, this);
-                    StartCoroutine(ViewTaskSystem.Instance.TrueCanvasMove(i, gameObject));
-                    isTrue = true;
-
-                }
+                GetComponent<BoxCollider>().enabled = false;
+                AddedObject.Instance.StartSlalom(this);
             }
-
-            if (!isTrue)
+            else
             {
                 WrongObjectFunc(gameObject);
                 StartCoroutine(ViewTaskSystem.Instance.WrongCanvasMove(gameObject));
@@ -34,14 +26,13 @@ public class ObjectTouch : MonoBehaviour
     }
 
 
-    public void ItemDown(int taskCount)
+    public void ItemDown()
     {
         TaskSystem taskSystem = TaskSystem.Instance;
 
-        taskSystem.ObjectCountList[taskCount]--;
-        taskSystem.templateImagePos[taskCount].gameObject.GetComponentInChildren<Text>().text = taskSystem.ObjectCountList[taskCount].ToString();
-        if (taskSystem.ObjectCountList[taskCount] == 0)
-            taskSystem.ObjectBoolList[taskCount] = true;
+        CabinetSystem.Instance.CabinetClass[taskSystem.lineCount].ObjectGridBool[0, taskSystem.columnCount] = false;
+
+        taskSystem.NewSearchMaterial();
     }
 
     private void BackTotheMove(GameObject player, GameObject obj)

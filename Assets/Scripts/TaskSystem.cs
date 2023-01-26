@@ -5,37 +5,22 @@ using UnityEngine.UI;
 
 public class TaskSystem : MonoSingleton<TaskSystem>
 {
-    public List<int> ObjectTypeList = new List<int>();
-    public List<int> ObjectCountList = new List<int>();
-    public List<int> ObjectMaterialList = new List<int>();
-    public List<bool> ObjectBoolList = new List<bool>();
+    public int searchMaterialCount, searchTypeCount, columnCount, lineCount;
+    public int wrongCount = 0, maxWrongCount = 2;
 
-    public List<Image> templateImagePos = new List<Image>();
-
-    public void TaskStart()
+    public void NewSearchMaterial()
     {
-        SelectTaskList(ItemData.Instance.field.taskObjectTypeCount, MateraiSystem.Instance.ObjectMateral.Count, ItemData.Instance.field.ObjectTypeCount, ItemData.Instance.field.taskObjectTypeCount, ObjectMaterialList, ObjectTypeList, ObjectCountList, ObjectBoolList);
-    }
-
-    public bool CheckFinish()
-    {
-        bool isFinish = true;
-        for (int i = 0; i < ObjectBoolList.Count; i++)
+        do
         {
-            if (!ObjectBoolList[i])
-                isFinish = false;
+            columnCount = Random.Range(0, 8);
+            lineCount = Random.Range(0, 3);
         }
-        return isFinish;
-    }
+        while (!CabinetSystem.Instance.CabinetClass[lineCount].ObjectGridBool[0, columnCount]);
 
-    public Image CallImage(Image freeImage, int taskCount)
-    {
-        Image tempImage = freeImage;
-        tempImage.sprite = MateraiSystem.Instance.objectTemp2D[ObjectTypeList[taskCount]];
-        Material mat = new Material(MateraiSystem.Instance.Mat2D.shader);
-        tempImage.material = mat;
-        tempImage.material.color = MateraiSystem.Instance.ObjectMateral[ObjectMaterialList[taskCount]].color;
-        return tempImage;
+        ObjectID objectID = CabinetSystem.Instance.CabinetClass[lineCount].ObjectGridGameObject[0, columnCount].GetComponent<ObjectID>();
+
+        searchMaterialCount = objectID.materialCount;
+        searchTypeCount = objectID.objectID;
     }
 
     public Image CallWrong(Image freeImage, Sprite freeSprite, Material RedMat)
@@ -48,20 +33,15 @@ public class TaskSystem : MonoSingleton<TaskSystem>
         return tempImage;
     }
 
-    private void SelectTaskList(int taskCount, int materialMaxCount, int typeMaxCount, int objectCountMaxCount, List<int> ObjectMaterialList, List<int> ObjectTypeList, List<int> ObjectTypeCountList, List<bool> ObjectBoolList)
+    public bool CheckFinish()
     {
-        for (int i = 0; i < taskCount; i++)
-        {
-            ObjectMaterialList.Add(Random.Range(0, materialMaxCount));
-            ObjectTypeList.Add(Random.Range(0, typeMaxCount));
-            ObjectTypeCountList.Add(Random.Range(1, objectCountMaxCount));
-            ObjectBoolList.Add(false);
-            templateImagePos[i].gameObject.SetActive(true);
-            templateImagePos[i].sprite = MateraiSystem.Instance.objectTemp2D[ObjectTypeList[i]];
-            Material mat = new Material(MateraiSystem.Instance.Mat2D.shader);
-            templateImagePos[i].material = mat;
-            templateImagePos[i].material.color = MateraiSystem.Instance.ObjectMateral[ObjectMaterialList[i]].color;
-            templateImagePos[i].gameObject.transform.GetChild(0).GetComponent<Text>().text = ObjectTypeCountList[i].ToString();
-        }
+        bool isFinish = true;
+
+        for (int i1 = 0; i1 < 3; i1++)
+            for (int i2 = 0; i2 < 8; i2++)
+                if (CabinetSystem.Instance.CabinetClass[i1].ObjectGridBool[0, i2])
+                    isFinish = false;
+
+        return isFinish;
     }
 }

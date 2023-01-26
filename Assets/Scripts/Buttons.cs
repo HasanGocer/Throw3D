@@ -77,18 +77,13 @@ public class Buttons : MonoSingleton<Buttons>
     {
         _tutorialPanel.SetActive(true);
         _startPanel.SetActive(false);
-        ViewTaskSystem.Instance.ViewPanelOn();
-        TaskSystem.Instance.TaskStart();
-        ViewTaskSystem.Instance.OpenQuestionMark();
         ScaleSystem.Instance.startScaleSystem();
         CabinetSystem.Instance.StartCabinetSystem();
-        yield return new WaitForSeconds(6);
-        StartCoroutine(ViewTaskSystem.Instance.WievTaskOff());
+        yield return new WaitForSeconds(1);
         _tutorialPanel.SetActive(false);
         taskPanel.SetActive(true);
         GameManager.Instance.isStart = true;
         StartCoroutine(OpenLight.Instance.LightIsThere());
-        StartCoroutine(TimerSystem.Instance.TimerStart());
     }
     private IEnumerator WinPrizeButton()
     {
