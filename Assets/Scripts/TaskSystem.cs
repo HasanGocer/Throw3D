@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class TaskSystem : MonoSingleton<TaskSystem>
 {
+    public GameObject tempObject, tempObjectPos;
     public int searchMaterialCount, searchTypeCount, columnCount, lineCount;
     public int wrongCount = 0, maxWrongCount = 2;
 
@@ -21,6 +23,15 @@ public class TaskSystem : MonoSingleton<TaskSystem>
 
         searchMaterialCount = objectID.materialCount;
         searchTypeCount = objectID.objectID;
+    }
+
+    public IEnumerator TrueObjectTaskMove()
+    {
+        tempObject.transform.DOMove(CabinetSystem.Instance.CabinetClass[lineCount].ObjectGridGameObject[0, columnCount].transform.position, 1.5f).SetEase(Ease.InOutSine);
+        yield return new WaitForSeconds(1.5f);
+        //partical
+        CabinetSystem.Instance.CabinetClass[lineCount].ObjectGridGameObject[0, columnCount].SetActive(false);
+
     }
 
     public Image CallWrong(Image freeImage, Sprite freeSprite, Material RedMat)
